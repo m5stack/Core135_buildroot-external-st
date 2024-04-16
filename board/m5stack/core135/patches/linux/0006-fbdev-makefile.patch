@@ -1,0 +1,7 @@
+--- a/drivers/staging/fbtft/Makefile	2023-06-16 18:05:22.000000000 +0800
++++ b/drivers/staging/fbtft/Makefile	2024-04-11 10:17:25.671555921 +0800
+@@ -36,3 +36,4 @@ obj-$(CONFIG_FB_TFT_TLS8204)     += fb_t
+ obj-$(CONFIG_FB_TFT_UC1611)      += fb_uc1611.o
+ obj-$(CONFIG_FB_TFT_UC1701)      += fb_uc1701.o
+ obj-$(CONFIG_FB_TFT_UPD161704)   += fb_upd161704.o
++obj-$(CONFIG_FB_TFT_ILI9341_M5)   += fb_ili9341_m5.o

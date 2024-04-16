@@ -1,0 +1,20 @@
+--- a/drivers/staging/fbtft/fbtft-core.c	2024-04-15 11:41:30.787548227 +0800
++++ b/drivers/staging/fbtft/fbtft-core.c	2024-04-15 11:38:53.528583466 +0800
+@@ -318,7 +318,7 @@
+ 	spin_unlock(&par->dirty_lock);
+ 
+ 	/* Schedule deferred_io to update display (no-op if already on queue)*/
+-	schedule_delayed_work(&info->deferred_work, fbdefio->delay);
++	schedule_delayed_work(&info->deferred_work, 0);
+ }
+ 
+ static void fbtft_deferred_io(struct fb_info *info, struct list_head *pagereflist)
+@@ -573,6 +573,8 @@
+ 	/* override driver values? */
+ 	if (pdata->fps)
+ 		fps = pdata->fps;
++   if (pdata->display.bpp)
++       bpp = pdata->display.bpp;
+ 	if (pdata->txbuflen)
+ 		txbuflen = pdata->txbuflen;
+ 	if (pdata->display.init_sequence)

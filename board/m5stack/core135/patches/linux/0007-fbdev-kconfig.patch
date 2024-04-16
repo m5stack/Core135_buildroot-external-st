@@ -1,0 +1,12 @@
+--- a/drivers/staging/fbtft/Kconfig	2023-06-16 18:05:22.000000000 +0800
++++ b/drivers/staging/fbtft/Kconfig	2024-04-11 10:17:15.907394473 +0800
+@@ -200,3 +200,9 @@ config FB_TFT_UPD161704
+ 	depends on FB_TFT
+ 	help
+ 	  Generic Framebuffer support for uPD161704
++
++config FB_TFT_ILI9341_M5
++	tristate "FB driver for the ILI9341 LCD Controller for m5"
++	depends on FB_TFT
++	help
++	  Generic Framebuffer support for ILI9341_M5
