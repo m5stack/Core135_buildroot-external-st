@@ -1,1 +1,15 @@
 #!/bin/sh
+[ "$1" = "stop" ] && exit 0
+modprobe fb_ili9341_m5
+FRAMEBUFFER=/dev/fb1 fbv /usr/local/M5/logo.jpg &> /dev/null &
+echo 1 4 1 7 > /proc/sys/kernel/printk
+usr/local/M5/lt8618sxb_mcu_config &> /dev/null &
+tinyplay /usr/local/M5/chexian.wav &> /dev/null &
+
+# set otg master
+# echo 130 > /sys/class/gpio/export && echo out > /sys/class/gpio/gpio130/direction && echo 1 > /sys/class/gpio/gpio130/value 
+# echo "host" >/sys/class/usb_role/49000000.usb-otg-role-switch/role
+
+
+# set bus 5V out
+echo 131 > /sys/class/gpio/export && echo out > /sys/class/gpio/gpio131/direction && echo 1 > /sys/class/gpio/gpio131/value
