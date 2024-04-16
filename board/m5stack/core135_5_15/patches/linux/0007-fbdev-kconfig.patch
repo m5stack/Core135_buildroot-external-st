@@ -1,0 +1,12 @@
+--- a/drivers/staging/fbtft/Kconfig	2024-04-15 14:45:36.934237077 +0800
++++ b/drivers/staging/fbtft/Kconfig	2024-04-15 14:45:56.634589103 +0800
+@@ -206,3 +206,9 @@ config FB_TFT_WATTEROTT
+ 	depends on FB_TFT
+ 	help
+ 	  Generic Framebuffer support for WATTEROTT
++
++config FB_TFT_ILI9341_M5
++	tristate "FB driver for the ILI9341 LCD Controller for m5"
++	depends on FB_TFT
++	help
++	  Generic Framebuffer support for ILI9341_M5
