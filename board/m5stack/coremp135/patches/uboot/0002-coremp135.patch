@@ -1,5 +1,5 @@
---- a/configs/core135_defconfig	2024-04-15 12:16:26.409859959 +0800
-+++ b/configs/core135_defconfig	2024-04-15 12:16:19.373730487 +0800
+--- a/configs/coremp135_defconfig	2024-04-15 12:16:26.409859959 +0800
++++ b/configs/coremp135_defconfig	2024-04-15 12:16:19.373730487 +0800
 @@ -0,0 +1,146 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_STM32MP=y
