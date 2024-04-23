@@ -285,6 +285,7 @@
 	pinctrl-2 = <&usart6_idle_pins_mx>;
 	/delete-property/dmas;
 	/delete-property/dma-names;
+	rx-tx-swap;
 	status = "okay";
 
 	u-boot,dm-pre-reloc;
@@ -452,14 +453,14 @@
 		pins1 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('C', 6, AF7)>; /* USART6_TX */
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
+			bias-pull-up;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('C', 7, AF7)>; /* USART6_RX */
-			bias-pull-up;
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <0>;
 		};
 	};
 

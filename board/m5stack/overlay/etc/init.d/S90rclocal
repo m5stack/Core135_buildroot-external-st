@@ -1,16 +1,16 @@
 #!/bin/sh
 #
-# Starts /etc/rc.load.
+# Starts /etc/rc.local.
 #
 
 start() {
-	printf "Stopping /etc/rc.load"
-    /etc/rc.load start
+	printf "Stopping /etc/rc.local"
+    /etc/rc.local start
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
 }
 stop() {
-	printf "Stopping /etc/rc.load"
-    # /etc/rc.load stop
+	printf "Stopping /etc/rc.local"
+    # /etc/rc.local stop
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
 }
 restart() {
