@@ -132,34 +132,25 @@
 	};
 
 	sound {
-		compatible = "audio-graph-card";
-		label = "STM32MP135F-DK";
-		dais = <&sai1a_port &sai1b_port>;
+        compatible = "simple-audio-card";
+        simple-audio-card,format = "i2s";
+        simple-audio-card,mclk-fs = <256>;
+        simple-audio-card,name = "ns4168-codec";
+        status = "okay";
+
+        simple-audio-card,cpu {
+                sound-dai = <&sai1a>;
+        };
+        simple-audio-card,codec {
+                sound-dai = <&spdif_out>;
+        };
+	};
+	
+	spdif_out: spdif-out {
+		#sound-dai-cells = <0>;
+		compatible = "linux,spdif-dit";
 		status = "okay";
 	};
-	OutToPins_codec: OutToPins_codec@0 {
-		compatible = "OutToPins_codec";
-		#reg = <0>;
-		#sound-dai-cells = <0>;
-		clocks = <&sai1a>;
-		clock-names = "MCLK";
-		status = "okay";
-
-		OutToPins_port: port {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			OutToPins_tx0_endpoint: endpoint@0 {
-							reg = <0>;
-							remote-endpoint = <&sai1a_endpoint>;
-			};
-
-			OutToPins_tx1_endpoint: endpoint@1 {
-							reg = <1>;
-							remote-endpoint = <&sai1b_endpoint>;
-			};
-		};
-    };
 };
 
 
@@ -178,30 +169,6 @@
 	#clock-cells = <0>;
 	dma-names = "tx";
 	status = "okay";
-
-	sai1a_port: port {
-		sai1a_endpoint: endpoint {
-			remote-endpoint = <&OutToPins_tx0_endpoint>;
-			format = "i2s";
-			dai-tdm-slot-num = <2>;
-			dai-tdm-slot-width = <32>;
-		};
-	};
-};
- 
-&sai1b{
-	#clock-cells = <0>;
-	dma-names = "tx";
-	status = "okay";
-
-	sai1b_port: port {
-		sai1b_endpoint: endpoint {
-			remote-endpoint = <&OutToPins_tx1_endpoint>;
-			format = "i2s";
-			dai-tdm-slot-num = <2>;
-			dai-tdm-slot-width = <32>;
-		};
-	};
 };
 
 

@@ -273,7 +273,8 @@
 &usbotg_hs {
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
-	usb-role-switch;
+	u-boot,force-b-session-valid;
+	hnp-srp-disable;
 	status = "okay";
 };
 

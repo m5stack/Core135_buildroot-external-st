@@ -8,7 +8,6 @@ snd_timer
 snd_pcm
 snd_pcm_dmaengine
 snd_soc_core
-out_to_pins
 snd_soc_simple_card_utils
 snd_soc_audio_graph_card
 snd_soc_stm32_sai
