@@ -395,6 +395,12 @@
 			src = < CLK_PLL4_HSE >;
 			divmn = < 5 124 >;
 		};
+
+		pll4_vco_594Mhz: pll4-vco-594Mhz {
+			src = < CLK_PLL4_HSE >;
+			divmn = < 3 98 >;
+			frac = < 0 >;
+		};
 	};
 
 	// /* VCO = 1300.0 MHz => P = 650 (CPU) */
@@ -471,8 +477,7 @@
 	pll4:st,pll@3 {
 		compatible = "st,stm32mp1-pll";
 		reg = <3>;
-		// st,pll = < &pll4_cfg1 >;
-		st,pll = < &pll4_cfg2 >;
+		st,pll = < &pll4_cfg4 >;
 
 		/* VCO = 600.0 MHz => P = 25, Q = 10, R = 50 */
 		pll4_cfg1: pll4_cfg1 {
@@ -490,6 +495,12 @@
 		pll4_cfg3: pll4_cfg3 {
 			st,pll_vco = < &pll4_vco_500Mhz >;
 			st,pll_div_pqr = < 19 6 9 >;
+		};
+
+		/* VCO = 594.0 MHz => P = 118.8, Q = 74.25, R = 59.4 */
+		pll4_cfg4: pll4_cfg4 {
+			st,pll_vco = < &pll4_vco_594Mhz >;
+			st,pll_div_pqr = < 4 7 9 >;
 		};
 	};
 
