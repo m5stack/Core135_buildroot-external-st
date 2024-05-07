@@ -126,7 +126,7 @@
 		regulator-boot-on;
 	};
 
-	sound {
+	sound0 {
         compatible = "simple-audio-card";
         simple-audio-card,format = "i2s";
         simple-audio-card,mclk-fs = <256>;
@@ -137,11 +137,32 @@
                 sound-dai = <&sai1a>;
         };
         simple-audio-card,codec {
-                sound-dai = <&spdif_out>;
+                sound-dai = <&spdif_out0>;
         };
 	};
-	
-	spdif_out: spdif-out {
+
+	sound1 {
+        compatible = "simple-audio-card";
+        simple-audio-card,format = "i2s";
+        simple-audio-card,mclk-fs = <256>;
+        simple-audio-card,name = "hdmi-codec";
+        status = "okay";
+
+        simple-audio-card,cpu {
+                sound-dai = <&sai1b>;
+        };
+        simple-audio-card,codec {
+                sound-dai = <&spdif_out1>;
+        };
+	};
+
+	spdif_out0: spdif-out0 {
+		#sound-dai-cells = <0>;
+		compatible = "linux,spdif-dit";
+		status = "okay";
+	};
+
+	spdif_out1: spdif-out1 {
 		#sound-dai-cells = <0>;
 		compatible = "linux,spdif-dit";
 		status = "okay";
@@ -159,6 +180,12 @@
 };
 
 &sai1a{
+	#clock-cells = <0>;
+	dma-names = "tx";
+	status = "okay";
+};
+
+&sai1b{
 	#clock-cells = <0>;
 	dma-names = "tx";
 	status = "okay";

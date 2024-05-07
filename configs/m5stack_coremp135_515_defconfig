@@ -24,6 +24,10 @@ BR2_PACKAGE_E2FSPROGS_FSCK=y
 BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
 BR2_PACKAGE_GPTFDISK=y
 BR2_PACKAGE_GPTFDISK_GDISK=y
+BR2_PACKAGE_GPTFDISK_SGDISK=y
+BR2_PACKAGE_GPTFDISK_CGDISK=y
+BR2_PACKAGE_NCURSES=y
+BR2_PACKAGE_NCURSES_WCHAR=y
 BR2_PACKAGE_UTIL_LINUX=y
 BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
 BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
@@ -34,6 +38,7 @@ BR2_PACKAGE_FBV_PNG=y
 BR2_PACKAGE_FBV_JPEG=y
 BR2_PACKAGE_FBV_GIF=y
 
+BR2_PACKAGE_POPT=y
 BR2_PACKAGE_DHCPCD=y
 BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP=y
 
@@ -100,9 +105,9 @@ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="dtb-y=stm32mp135f-coremp135.dtb DEVICE_TREE=st
 # kernel config
 BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,STMicroelectronics,linux)v5.15-stm32mp-r1.tar.gz"
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,STMicroelectronics,linux)v5.15-stm32mp-r2.1.tar.gz"
 BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/fragment-01-multiv7_cleanup.config $(LINUX_DIR)/arch/arm/configs/fragment-02-multiv7_addons.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-disable-etnaviv.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-enable-fbdev-emul.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-enable-m5stack.config"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/fragment-01-multiv7_cleanup.config $(LINUX_DIR)/arch/arm/configs/fragment-02-multiv7_addons.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-disable-etnaviv.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-enable-fbdev-emul.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/linux-enable-m5stack.config $(BR2_EXTERNAL_ST_PATH)/board/m5stack/coremp135_5_15/fragment-03-systemd.config"
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
