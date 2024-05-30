@@ -11,6 +11,6 @@ tinyplay /usr/local/m5stack/logo.wav &> /dev/null &
 echo "device" >/sys/class/usb_role/49000000.usb-otg-role-switch/role
 
 # set bus 5V out
-# echo 131 > /sys/class/gpio/export && echo out > /sys/class/gpio/gpio131/direction && echo 1 > /sys/class/gpio/gpio131/value
+# echo 131 > /sys/class/gpio/export && echo out > /sys/class/gpio/PI3/direction && echo 1 > /sys/class/gpio/PI3/value
 
 
