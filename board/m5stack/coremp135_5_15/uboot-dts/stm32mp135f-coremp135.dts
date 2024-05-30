@@ -74,6 +74,67 @@
 		regulator-always-on;
 	};
 
+	panel_backlight: panel-backlight {
+		compatible = "gpio-backlight";
+		gpios = <&gpiof 15 GPIO_ACTIVE_HIGH>;
+		default-on;
+		default-brightness-level = <0>;
+		status = "okay";
+	};
+
+	panel_rgb: panel-rgb {
+		compatible = "simple-panel", "panel-dpi";
+		backlight = <&panel_backlight>;
+		power-supply = <&scmi_v3v3_sw>;
+		data-mapping = "rgb24";
+		status = "okay";
+
+		width-mm = <320>;
+		height-mm = <180>;
+
+		port {
+			panel_in_rgb: endpoint {
+				remote-endpoint = <&ltdc_out_rgb>;
+			};
+		};
+
+		display-timings {
+			timing@0 {
+				clock-frequency = <74250000>;
+				hactive = <1280>;
+				vactive = <720>;
+				hsync-len = <40>;
+				hfront-porch = <110>;
+				hback-porch = <220>;
+				vsync-len = <5>;
+				vfront-porch = <5>;
+				vback-porch = <20>;
+
+				hsync-active = <1>;
+				vsync-active = <1>;
+
+				de-active = <1>;
+				pixelclk-active = <1>;
+			};
+		};
+	};
+};
+
+&ltdc {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&ltdc_pins_mx>;
+	pinctrl-1 = <&ltdc_sleep_pins_mx>;
+	status = "okay";
+
+	port {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ltdc_out_rgb: endpoint@0 {
+			reg = <0>;
+			remote-endpoint = <&panel_in_rgb>;
+		};
+	};
 };
 
 &crc1 {
@@ -155,7 +216,7 @@
 	pinctrl-1 = <&i2c3_sleep_pins_mx>;
 	// i2c-scl-rising-time-ns = <96>;
 	// i2c-scl-falling-time-ns = <3>;
-	clock-frequency = <1000000>;
+	clock-frequency = <100000>;
 	status = "okay";
 	// status = "disabled";
 	/* spare dmas for other usage */

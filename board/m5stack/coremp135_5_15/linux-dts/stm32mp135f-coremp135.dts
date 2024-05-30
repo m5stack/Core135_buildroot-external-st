@@ -41,11 +41,11 @@
 		ranges;
 		stdout-path = "serial0:115200n8";
 
-		framebuffer {
-			compatible = "simple-framebuffer";
-			clocks = <&rcc LTDC_PX>;
-			status = "disabled";
-		};
+		// framebuffer {
+		// 	compatible = "simple-framebuffer";
+		// 	clocks = <&rcc LTDC_PX>;
+		// 	status = "disabled";
+		// };
 	};
 
 	clocks {
@@ -61,10 +61,10 @@
 		#size-cells = <1>;
 		ranges;
 
-		optee_framebuffer@dd000000 {
-			reg = <0xdd000000 0x1000000>;
-			no-map;
-		};
+		// optee_framebuffer@dd000000 {
+		// 	reg = <0xdd000000 0x1000000>;
+		// 	no-map;
+		// };
 
 		optee@de000000 {
 			reg = <0xde000000 0x2000000>;
