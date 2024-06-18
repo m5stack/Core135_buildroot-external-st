@@ -18,7 +18,7 @@ clone_buildroot() {
     [ -d 'CoreMP135_buildroot' ] || git clone https://github.com/m5stack/CoreMP135_buildroot.git
     pushd CoreMP135_buildroot
     [ -f 'dl.7z' ] || wget https://github.com/m5stack/CoreMP135_buildroot/releases/download/m5stack%2F2024.5.1/dl.7z
-    [ -d 'dl' ] || 7z e dl.7z
+    [ -d 'dl' ] || 7z x dl.7z
     popd
 }
 
