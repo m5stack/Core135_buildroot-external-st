@@ -1,0 +1,24 @@
+From 11b644f162441710d8bafce9aa2fc717576dbc2a Mon Sep 17 00:00:00 2001
+From: MeemeeLab <57629983+MeemeeLab@users.noreply.github.com>
+Date: Thu, 20 Jun 2024 07:58:41 +0900
+Subject: [PATCH 5/5] mfd: axp2101: add support for AXP2101
+
+---
+ drivers/mfd/simple-mfd-i2c.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+index f4c8fc3ee463..3b8f56fd8c16 100644
+--- a/drivers/mfd/simple-mfd-i2c.c
++++ b/drivers/mfd/simple-mfd-i2c.c
+@@ -74,6 +74,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+ 
+ static const struct of_device_id simple_mfd_i2c_of_match[] = {
+ 	{ .compatible = "kontron,sl28cpld" },
++	{ .compatible = "x-powers,axp2101"},
+ 	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
+ 	{}
+ };
+-- 
+2.45.2
+

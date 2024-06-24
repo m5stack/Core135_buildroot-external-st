@@ -293,6 +293,24 @@
 	// /* spare dmas for other usage */
 	/delete-property/dmas;
 	/delete-property/dma-names;
+
+	axp2101@34 {
+		compatible = "x-powers,axp2101";
+		reg = <0x34>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		status = "okay";
+
+		backlight: axp2101_bl {
+			compatible = "m5stack,axp2101-backlight";
+			status = "okay";
+		};
+		poweroff: axp2101_poweroff {
+			compatible = "x-powers,axp2101-poweroff";
+			status = "okay";
+		};
+	};
+
 	touchscreen@38 {
 			compatible = "focaltech,ft6236";
 			reg = <0x38>;
@@ -421,18 +439,21 @@
 	cs-gpios = <&gpioh 5 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
-	disply@0 {
-		compatible = "ilitek,ili9341_m5";
+	display@0 {
+		compatible = "ilitek,ili9342c";
 		reg = <0>;
 		dc-gpios = <&gpioh 4 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpioi 0 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpioi 0 GPIO_ACTIVE_HIGH>;
 		spi-max-frequency = <74250000>;
-		status = "okay";
-		rotate = <180>;
-		bgr;
+
+		rotate = <0>;
 		buswidth = <8>;
 		width = <320>;
 		height = <240>;
+
+		backlight = <&backlight>;
+
+		status = "okay";
 	};
 };
 
