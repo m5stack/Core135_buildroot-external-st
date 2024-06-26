@@ -33,7 +33,7 @@ start() {
 stop() {
 	printf 'Stopping %s: ' "$MODULES"
 
-#	load_unload unload
+	load_unload unload
 
 	echo 'OK'
 }
