@@ -30,7 +30,7 @@ make_buildroot() {
 
 
 
-package_lists=("debianutils" "sed" "make" "binutils" "build-essential" "gcc" "g++" "bash" "patch" "gzip" "bzip2" "perl" "tar" "cpio" "unzip" "rsync" "file" "bc" "git" "cmake" "p7zip-full" "python3" "python3-pip" "expect")
+package_lists=("debianutils" "sed" "make" "binutils" "build-essential" "gcc" "g++" "bash" "patch" "gzip" "bzip2" "perl" "tar" "cpio" "unzip" "rsync" "file" "bc" "git" "cmake" "p7zip-full" "python3" "python3-pip" "expect" "libssl-dev")
 
 for item in "${package_lists[@]}"; do
     check_package_existence "$item"
