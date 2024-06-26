@@ -431,7 +431,7 @@
 		reg = <0>;
 		dc-gpios = <&gpioh 4 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&gpioi 0 GPIO_ACTIVE_LOW>;
-		spi-max-frequency = <74250000>;
+		spi-max-frequency = <50000000>;
 		status = "okay";
 		rotate = <180>;
 		bgr;
