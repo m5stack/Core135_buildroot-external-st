@@ -1,17 +1,61 @@
---- a/drivers/staging/fbtft/fb_ili9341_m5.c	2024-03-27 18:41:29.759999974 +0800
-+++ b/drivers/staging/fbtft/fb_ili9341_m5.c	2024-04-11 10:15:12.533376430 +0800
-@@ -0,0 +1,304 @@
+From 1b1b5afa84c0143b51225bf61d479a3375b879a1 Mon Sep 17 00:00:00 2001
+From: dianjixz <dianjixz@m5stack.com>
+Date: Wed, 26 Jun 2024 15:26:22 +0800
+Subject: [PATCH] [add] fb_ili9342c
+
+---
+ drivers/staging/fbtft/Kconfig       |   6 +
+ drivers/staging/fbtft/Makefile      |   1 +
+ drivers/staging/fbtft/fb_ili9342c.c | 163 ++++++++++++++++++++++++++++
+ 3 files changed, 170 insertions(+)
+ create mode 100644 drivers/staging/fbtft/fb_ili9342c.c
+
+diff --git a/drivers/staging/fbtft/Kconfig b/drivers/staging/fbtft/Kconfig
+index 9571a4c0e..878ee62a6 100644
+--- a/drivers/staging/fbtft/Kconfig
++++ b/drivers/staging/fbtft/Kconfig
+@@ -76,6 +76,12 @@ config FB_TFT_ILI9341
+ 	help
+ 	  Generic Framebuffer support for ILI9341
+ 
++config FB_TFT_ILI9342C
++	tristate "FB driver for the ILI9341C LCD Controller"
++	depends on FB_TFT
++	help
++	  Generic Framebuffer support for ILI9342C
++
+ config FB_TFT_ILI9481
+ 	tristate "FB driver for the ILI9481 LCD Controller"
+ 	depends on FB_TFT
+diff --git a/drivers/staging/fbtft/Makefile b/drivers/staging/fbtft/Makefile
+index 7cd44b649..9ce97fee5 100644
+--- a/drivers/staging/fbtft/Makefile
++++ b/drivers/staging/fbtft/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_FB_TFT_ILI9320)     += fb_ili9320.o
+ obj-$(CONFIG_FB_TFT_ILI9325)     += fb_ili9325.o
+ obj-$(CONFIG_FB_TFT_ILI9340)     += fb_ili9340.o
+ obj-$(CONFIG_FB_TFT_ILI9341)     += fb_ili9341.o
++obj-$(CONFIG_FB_TFT_ILI9342C) 	 += fb_ili9342c.o
+ obj-$(CONFIG_FB_TFT_ILI9481)     += fb_ili9481.o
+ obj-$(CONFIG_FB_TFT_ILI9486)     += fb_ili9486.o
+ obj-$(CONFIG_FB_TFT_PCD8544)     += fb_pcd8544.o
+diff --git a/drivers/staging/fbtft/fb_ili9342c.c b/drivers/staging/fbtft/fb_ili9342c.c
+new file mode 100644
+index 000000000..83b1aae4c
+--- /dev/null
++++ b/drivers/staging/fbtft/fb_ili9342c.c
+@@ -0,0 +1,163 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * FB driver for the ILI9341 LCD display controller
++ * FB driver for the ILI9342C LCD display controller
 + *
 + * This display uses 9-bit SPI: Data/Command bit + 8 data bits
 + * For platforms that doesn't support 9-bit, the driver is capable
 + * of emulating this using 8-bit transfer.
 + * This is done by transferring eight 9-bit words in 9 bytes.
 + *
-+ * Copyright (C) 2013 Christian Vogelgsang
-+ * Based on adafruit22fb.c by Noralf Tronnes
++ * Copyright (C) 2013 Christian Vogelgsang, M5Stack, MeemeeLab, dianjixz
++ * Based on fb_ili9341.c, modified for ili9342c
 + */
 +
 +#include <linux/module.h>
@@ -22,7 +66,7 @@
 +
 +#include "fbtft.h"
 +
-+#define DRVNAME		"fb_ili9341"
++#define DRVNAME		"fb_ili9342c"
 +#define WIDTH		240
 +#define HEIGHT		320
 +#define TXBUFLEN	(4 * PAGE_SIZE)
@@ -60,7 +104,7 @@
 +	/* ------------display-------------------------------------- */
 +	write_reg(par, 0xB7, 0x07); /* entry mode set */
 +	write_reg(par, 0xB6, 0x0A, 0x82, 0x27, 0x00);
-+	write_reg(par, 0x21); /* inv color */
++	write_reg(par, 0x21); /* 8.2.16. Display Inversion ON */
 +	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
 +	mdelay(100);
 +	write_reg(par, MIPI_DCS_SET_DISPLAY_ON);
@@ -79,6 +123,11 @@
 +
 +	write_reg(par, MIPI_DCS_WRITE_MEMORY_START);
 +}
++
++/*
++ * Memory access control differs from ILI9341 and
++ * specification can be found on 8.2.29. Memory Access Control
++ */
 +
 +#define MEM_Y   BIT(7) /* MY row address order */
 +#define MEM_X   BIT(6) /* MX column address order */
@@ -99,7 +148,7 @@
 +		break;
 +	case 180:
 +		write_reg(par, MIPI_DCS_SET_ADDRESS_MODE,
-+						 (par->bgr << MEM_BGR));
++			  (par->bgr << MEM_BGR));
 +		break;
 +	case 90:
 +		write_reg(par, MIPI_DCS_SET_ADDRESS_MODE,
@@ -133,151 +182,6 @@
 +
 +#undef CURVE
 +
-+
-+
-+#ifdef CONFIG_FB_BACKLIGHT
-+
-+
-+#include<linux/i2c.h>
-+// * Write to I2C device */
-+static int sx1_i2c_write_byte(u8 devaddr, u8 regoffset, u8 value)
-+{
-+ struct i2c_adapter *adap;
-+ int err;
-+ struct i2c_msg msg[1];
-+ unsigned char data[2];
-+
-+ adap = i2c_get_adapter(0);
-+ if (!adap)
-+  return -ENODEV;
-+ msg->addr = devaddr; /* I2C address of chip */
-+ msg->flags = 0;
-+ msg->len = 2;
-+ msg->buf = data;
-+ data[0] = regoffset; /* register num */
-+ data[1] = value;  /* register data */
-+ err = i2c_transfer(adap, msg, 1);
-+ i2c_put_adapter(adap);
-+ if (err >= 0)
-+  return 0;
-+ return err;
-+}
-+
-+/* Read from I2C device */
-+static int sx1_i2c_read_byte(u8 devaddr, u8 regoffset, u8 *value)
-+{
-+ struct i2c_adapter *adap;
-+ int err;
-+ struct i2c_msg msg[1];
-+ unsigned char data[2];
-+
-+ adap = i2c_get_adapter(0);
-+ if (!adap)
-+  return -ENODEV;
-+
-+ msg->addr = devaddr; /* I2C address of chip */
-+ msg->flags = 0;
-+ msg->len = 1;
-+ msg->buf = data;
-+ data[0] = regoffset; /* register num */
-+ err = i2c_transfer(adap, msg, 1);
-+
-+ msg->addr = devaddr; /* I2C address */
-+ msg->flags = I2C_M_RD;
-+ msg->len = 1;
-+ msg->buf = data;
-+ err = i2c_transfer(adap, msg, 1);
-+ *value = data[0];
-+ i2c_put_adapter(adap);
-+
-+ if (err >= 0)
-+  return 0;
-+ return err;
-+}
-+
-+#include <linux/backlight.h>
-+
-+static int backlight_chip_update_status(struct backlight_device *bd)
-+{
-+	struct fbtft_par *par = bl_get_data(bd);
-+	int brightness = bd->props.brightness;
-+	u8 _reg_val;
-+	u8 bright_val;
-+	int ret;
-+
-+	fbtft_par_dbg(DEBUG_BACKLIGHT, par,
-+		      "%s: brightness=%d, power=%d, fb_blank=%d\n", __func__,
-+		      bd->props.brightness, bd->props.power,
-+		      bd->props.fb_blank);
-+
-+	if (bd->props.power != FB_BLANK_UNBLANK)
-+		brightness = 0;
-+
-+	if (bd->props.fb_blank != FB_BLANK_UNBLANK)
-+		brightness = 0;
-+
-+	ret = sx1_i2c_read_byte(0x34, 0x90, &_reg_val);
-+	if (0 == ret)
-+	{
-+		if (0 == brightness)
-+		{
-+			_reg_val = _reg_val & 0x7f;
-+			sx1_i2c_write_byte(0x34, 0x90, _reg_val);
-+		}
-+		else
-+		{
-+			if(_reg_val & 0x80)
-+			{
-+				bright_val = brightness / 3;
-+				if(bright_val > 28) bright_val = 28;
-+				sx1_i2c_write_byte(0x34, 0x99, bright_val);
-+			}
-+			else
-+			{
-+				bright_val = brightness / 3;
-+				if(bright_val > 28) bright_val = 28;
-+				sx1_i2c_write_byte(0x34, 0x99, bright_val);
-+
-+				_reg_val = _reg_val | 0x80;
-+				sx1_i2c_write_byte(0x34, 0x90, _reg_val);
-+			}
-+		}
-+	}
-+	return 0;
-+}
-+
-+static const struct backlight_ops bl_ops = {
-+	.update_status = backlight_chip_update_status,
-+};
-+
-+static void register_chip_backlight(struct fbtft_par *par)
-+{
-+	struct backlight_device *bd;
-+	struct backlight_properties bl_props = { 0, };
-+
-+	bl_props.type = BACKLIGHT_PLATFORM;
-+	bl_props.power = FB_BLANK_POWERDOWN;
-+	bl_props.max_brightness = 100;
-+	bl_props.brightness = 100;
-+
-+	bd = backlight_device_register(dev_driver_string(par->info->device),
-+				       par->info->device, par, &bl_ops,
-+				       &bl_props);
-+	if (IS_ERR(bd)) {
-+		dev_err(par->info->device,
-+			"cannot register backlight device (%ld)\n",
-+			PTR_ERR(bd));
-+		return;
-+	}
-+	par->info->bl_dev = bd;
-+
-+	if (!par->fbtftops.unregister_backlight)
-+		par->fbtftops.unregister_backlight = fbtft_unregister_backlight;
-+}
-+#else
-+#define register_chip_backlight NULL
-+#endif
-+
 +static struct fbtft_display display = {
 +	.regwidth = 8,
 +	.width = WIDTH,
@@ -290,18 +194,21 @@
 +		.init_display = init_display,
 +		.set_addr_win = set_addr_win,
 +		.set_var = set_var,
-+		.set_gamma = set_gamma,
-+		.register_backlight = register_chip_backlight,
++		.set_gamma = set_gamma
 +	},
 +};
 +
-+FBTFT_REGISTER_DRIVER(DRVNAME, "ilitek,ili9341_m5", &display);
++FBTFT_REGISTER_DRIVER(DRVNAME, "ilitek,ili9342c", &display);
 +
 +MODULE_ALIAS("spi:" DRVNAME);
 +MODULE_ALIAS("platform:" DRVNAME);
-+MODULE_ALIAS("spi:ili9341");
-+MODULE_ALIAS("platform:ili9341");
++MODULE_ALIAS("spi:ili9342c");
++MODULE_ALIAS("platform:ili9342c");
 +
-+MODULE_DESCRIPTION("FB driver for the ILI9341 LCD display controller");
-+MODULE_AUTHOR("Christian Vogelgsang");
++MODULE_DESCRIPTION("FB driver for the ILI9342C LCD display controller");
++MODULE_AUTHOR("Christian Vogelgsang, M5Stack, MeemeeLab, dianjixz");
 +MODULE_LICENSE("GPL");
+\ No newline at end of file
+-- 
+2.34.1
+
