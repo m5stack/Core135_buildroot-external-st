@@ -2,16 +2,7 @@
 # SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
 #
 # SPDX-License-Identifier: MIT
-check_package_existence() {
-    local package=$1
-    if apt-cache show "$package" > /dev/null 2>&1; then
-        echo "The software package $package is available in the apt repository."
-        return 0
-    else
-        echo "The software package $package is not available in the apt repository."
-        return 1
-    fi
-}
+
 
 
 clone_buildroot() {
@@ -31,15 +22,7 @@ make_buildroot() {
     make -j `nproc`
 }
 
-
-
-package_lists=("debianutils" "sed" "make" "binutils" "build-essential" "gcc" "g++" "bash" "patch" "gzip" "bzip2" "perl" "tar" "cpio" "unzip" "rsync" "file" "bc" "git" "cmake" "p7zip-full" "python3" "python3-pip" "expect" "libssl-dev" "qemu-user-static")
-
-for item in "${package_lists[@]}"; do
-    check_package_existence "$item"
-    [ "$?" == "0" ] || sudo apt install $item -y
-done
-
+sudo apt install debianutils sed make binutils build-essential gcc g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc git cmake p7zip-full python3 python3-pip expect libssl-dev qemu-user-static -y
 
 fun_lists=("clone_buildroot" "make_buildroot")
 
