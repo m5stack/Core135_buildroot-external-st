@@ -34,7 +34,10 @@ sudo tar xf debian-minimal-armhf/debian-12.1-minimal-armhf-2023-08-22/armhf-root
 
 sudo cp --preserve=mode,timestamps -r rootfs_overlay/* rootfs/
 sudo cp --preserve=mode,timestamps -r ../overlay_debian12/* rootfs/
-
+sudo rm rootfs/etc/systemd/system/multi-user.target.wants/nginx.service
+sudo rm rootfs/etc/systemd/system/multi-user.target.wants/networking.service
+sudo rm rootfs/etc/systemd/system/network-online.target.wants/networking.service
+sudo sed -i '1a 127.0.0.1       CoreMP135' rootfs/etc/hosts
 
 sudo chroot rootfs/ /usr/bin/dpkg -i /var/gdisk_1.0.9-2.1_armhf.deb
 sudo chroot rootfs/ /usr/bin/dpkg -i /var/network-manager_1.42.4-1_armhf.deb
