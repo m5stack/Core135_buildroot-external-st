@@ -3,8 +3,6 @@
 # This file contains the names of kernel modules that should be loaded
 # at boot time, one per line. Lines beginning with "#" are ignored.
 # Parameters can be specified after the module name.
-blacklist ili9342c
-fb_ili9342c
 libcomposite
 g_serial
 
