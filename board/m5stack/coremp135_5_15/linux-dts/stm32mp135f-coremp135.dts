@@ -456,6 +456,7 @@
 		buswidth = <8>;
 		width = <320>;
 		height = <240>;
+		backlight = <&backlight>;
 	};
 };
 
