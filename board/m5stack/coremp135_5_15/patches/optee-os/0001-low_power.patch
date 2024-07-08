@@ -22,7 +22,7 @@
 +       PUT_ACK,
 +       PUTBYTE, 0x01,
 +       PUT_ACK,
-+       SCL_L,DELAY,2,SCL_H,DELAY,1,SDA_H,
++       SCL_L,DELAY,1,SDA_L,DELAY,2,SCL_H,DELAY,1,SDA_H,
 +       0,0
 +};
 +#endif
