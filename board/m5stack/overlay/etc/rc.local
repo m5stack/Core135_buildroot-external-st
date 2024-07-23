@@ -1,5 +1,5 @@
 #!/bin/sh
-[ "$1" == "stop" ] && exit 0
+[ "$1" = "stop" ] && exit 0
 modprobe fb_ili9342c
 FRAMEBUFFER=`cat /proc/fb | grep ili9342c | awk '{print "/dev/fb"$1}'` fbv /usr/local/m5stack/logo.jpg &> /dev/null &
 echo 1 4 1 7 > /proc/sys/kernel/printk

@@ -39,7 +39,7 @@ do_about() {
   whiptail --yesno "$DESCRIPTION" 20 70 1 --yes-button Exit --no-button check_update 
   RET=$?
   if [ $RET -eq 1 ] ; then
-    curl --fail https://raw.githubusercontent.com/m5stack/CoreMP135_buildroot-external-st/st/2023.02.10/board/m5stack/overlay/usr/local/m5stack/core-config -o /tmp/core-config
+    curl --fail https://raw.githubusercontent.com/m5stack/CoreMP135_buildroot-external-st/st/2023.02.10/tools/overlay_debian12/usr/bin/core-config -o /tmp/core-config
     if [ -f "/tmp/core-config" ] ; then
       chmod +x /tmp/core-config
       NEW_CORE_CONFIG_VERSION_ID=`sh /tmp/core-config --print-version-id`
